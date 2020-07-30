@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import Board from '../components/Board';
-import {StyleSheet, TouchableOpacity, Text, Button, View} from 'react-native';
-import {ListItem} from 'react-native-elements';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export default class Game extends Component {
   constructor(props) {
@@ -62,6 +70,7 @@ export default class Game extends Component {
 
       return (
         <Button
+          key={move}
           title={desc}
           onPress={() => {
             this.jumpTo(move);
@@ -77,29 +86,81 @@ export default class Game extends Component {
     }
 
     return (
-      <View style={styles.game}>
-        <View style={styles.gameBoard}>
-          <Board
-            squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
-          />
-        </View>
-        <View style={styles.gameInfo}>
-          <Text> {status} </Text>
+      <>
+        <StatusBar backgroundColor="#1b1b1b" barStyle="light-content" />
 
-          <Button
+        <View style={styles.game}>
+          <Icon
+            style={styles.menuIcon}
+            name="menuunfold"
+            size={30}
+            color="lightgrey"
             onPress={() => {
-              this.newGame();
+              this.props.navigation.openDrawer();
             }}
-            title="New Game"
           />
+          <Text style={styles.status}> {status} </Text>
 
-          <View>{moves}</View>
+          <View style={styles.gameBoard}>
+            <Board
+              squares={current.squares}
+              onClick={(i) => this.handleClick(i)}
+            />
+          </View>
+          <View style={styles.gameInfo}>
+            <TouchableOpacity
+              style={styles.newGame}
+              onPress={() => {
+                this.newGame();
+              }}>
+              <Text style={styles.newText}>New Game</Text>
+            </TouchableOpacity>
+
+            {/* <View>{moves}</View> */}
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  status: {
+    color: '#fff',
+    marginVertical: 10,
+    fontSize: 30,
+  },
+  game: {
+    justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
+  gameInfo: {
+    color: '#fff',
+    marginLeft: 20,
+  },
+  newGame: {
+    backgroundColor: '#fff',
+    width: 130,
+    height: 50,
+    borderRadius: 23,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  newText: {
+    fontSize: 20,
+    color: '#000',
+  },
+  menuIcon: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    // backgroundColor: '#000',
+    // color: '#fff',
+    zIndex: 999,
+  },
+});
 
 function calculateWinner(squares) {
   const lines = [
@@ -120,17 +181,3 @@ function calculateWinner(squares) {
   }
   return null;
 }
-
-const styles = StyleSheet.create({
-  status: {
-    marginBottom: 10,
-  },
-  game: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'lightgrey',
-  },
-  gameInfo: {
-    marginLeft: 20,
-  },
-});

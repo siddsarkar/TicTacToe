@@ -40,6 +40,8 @@ export default class Board extends Component {
 const styles = StyleSheet.create({
   board: {
     margin: 20,
+    borderWidth: 10,
+    borderColor: 'black',
   },
   boardRow: {
     flexDirection: 'row',
