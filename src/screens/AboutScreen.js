@@ -14,9 +14,9 @@ class Aboutscreen extends Component {
             this.props.navigation.navigate('Home');
           }}
         />
-        <Text style={styles.text}>hi</Text>
-        <Text style={styles.text}>i'm sid!</Text>
-        <Text style={styles.text}>a noob dev</Text>
+        <Text style={styles.text}>sidharth</Text>
+        <Text style={styles.text}>loves you</Text>
+        <Text style={styles.text}>3000</Text>
       </View>
     );
   }
