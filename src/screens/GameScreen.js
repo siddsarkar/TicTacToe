@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class Game extends Component {
   constructor(props) {
@@ -23,6 +24,10 @@ export default class Game extends Component {
       stepNumber: 0,
       xIsNext: true,
     };
+  }
+  componentDidMount() {
+    //do stuff
+    SplashScreen.hide();
   }
 
   handleClick(i) {
