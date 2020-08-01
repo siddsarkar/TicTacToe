@@ -44,7 +44,6 @@ export default class Game extends Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
-    console.log(this.state.stepNumber);
     Vibration.vibrate(50);
   }
 
@@ -116,13 +115,13 @@ export default class Game extends Component {
       status = `Player ${this.state.xIsNext ? 'X' : 'O'}'s  turn`;
     }
 
-    let sharebtn = (
+    const sharebtn = (
       <Text style={styles.newText}>
         <Icon name="sharealt" size={20} color="#fff" /> Share App
       </Text>
     );
 
-    let newgmbtn = (
+    const newgmbtn = (
       <Text style={styles.newText}>
         <Icon name="retweet" size={20} color="#fff" /> New Game
       </Text>
