@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Square from './Square';
 
 export default class Board extends Component {

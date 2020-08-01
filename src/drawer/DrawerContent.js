@@ -1,12 +1,10 @@
 import React from 'react';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
   BackHandler,
-  ScrollView,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -39,11 +37,11 @@ export function DrawerContent(props) {
       </TouchableOpacity>
       <TouchableOpacity style={styles.footer}>
         <Text style={styles.footertext}>
-          Developed with Love{`  `}
+          Developed with Love{'  '}
           <Icon style={{marginLeft: 20}} name="heart" size={11} color="#fff" />
         </Text>
         <Text style={styles.footertext}>by Siddhartth</Text>
-        <Text style={styles.footertext}>version 0.0.1</Text>
+        <Text style={styles.footertext}>version 0.0.3</Text>
       </TouchableOpacity>
     </View>
   );

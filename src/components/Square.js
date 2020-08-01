@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Button,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 function Square(props) {
   return (

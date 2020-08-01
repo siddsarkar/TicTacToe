@@ -5,12 +5,13 @@ import {
   TouchableOpacity,
   Text,
   View,
-  SafeAreaView,
   StatusBar,
+  Share,
+  Vibration,
 } from 'react-native';
-import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import SplashScreen from 'react-native-splash-screen';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Game extends Component {
   constructor(props) {
@@ -43,14 +44,16 @@ export default class Game extends Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
+    console.log(this.state.stepNumber);
+    Vibration.vibrate(50);
   }
 
-  jumpTo(step) {
-    this.setState({
-      stepNumber: step,
-      xIsNext: step % 2 === 0,
-    });
-  }
+  // jumpTo(step) {
+  //   this.setState({
+  //     stepNumber: step,
+  //     xIsNext: step % 2 === 0,
+  //   });
+  // }
 
   newGame() {
     this.setState({
@@ -68,27 +71,62 @@ export default class Game extends Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const showAlert = winner || this.state.stepNumber == 9 ? true : false;
+    const title = winner ? `Winner is ${winner} !` : 'Match tied';
 
-    const moves = history.map((step, move) => {
-      //   const desc = move ? 'Go to move #' + move : 'Go to game start';
-      const desc = `Go to move # ${move}`;
+    // const moves = history.map((step, move) => {
+    //   //   const desc = move ? 'Go to move #' + move : 'Go to game start';
+    //   const desc = `Go to move # ${move}`;
 
-      return (
-        <Button
-          key={move}
-          title={desc}
-          onPress={() => {
-            this.jumpTo(move);
-          }}></Button>
-      );
-    });
+    //   return (
+    //     <Button
+    //       key={move}
+    //       title={desc}
+    //       onPress={() => {
+    //         this.jumpTo(move);
+    //       }}
+    //     />
+    //   );
+    // });
+
+    const onShare = async () => {
+      try {
+        const result = await Share.share({
+          message:
+            'Checkout this awesome Tictactoe Game here | https://github.com/siddsarkar/tic-tac-toe-android-react-native/releases/',
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    };
 
     let status;
     if (winner) {
-      status = `Winner: ${winner}`;
+      status = `${winner} Won!`;
     } else {
-      status = `Next Player: ${this.state.xIsNext ? 'X' : 'O'}`;
+      status = `Player ${this.state.xIsNext ? 'X' : 'O'}'s  turn`;
     }
+
+    let sharebtn = (
+      <Text style={styles.newText}>
+        <Icon name="sharealt" size={20} color="#fff" /> Share App
+      </Text>
+    );
+
+    let newgmbtn = (
+      <Text style={styles.newText}>
+        <Icon name="retweet" size={20} color="#fff" /> New Game
+      </Text>
+    );
 
     return (
       <>
@@ -104,6 +142,13 @@ export default class Game extends Component {
               this.props.navigation.openDrawer();
             }}
           />
+          <Icon
+            style={{position: 'absolute', right: 20, top: 20, zIndex: 999}}
+            name="sharealt"
+            size={30}
+            color="lightgrey"
+            onPress={onShare}
+          />
           <Text style={styles.status}> {status} </Text>
 
           <View style={styles.gameBoard}>
@@ -118,9 +163,40 @@ export default class Game extends Component {
               onPress={() => {
                 this.newGame();
               }}>
-              <Text style={styles.newText}>New Game</Text>
+              <Text style={styles.newText}>Reset </Text>
             </TouchableOpacity>
 
+            <AwesomeAlert
+              cancelButtonStyle={{
+                ...styles.newGame,
+                backgroundColor: '#1b1b1b',
+                width: 150,
+              }}
+              cancelButtonTextStyle={styles.newText}
+              confirmButtonStyle={{
+                ...styles.newGame,
+                backgroundColor: '#1b1b1b',
+                width: 150,
+              }}
+              confirmButtonTextStyle={styles.newText}
+              actionContainerStyle={{flexDirection: 'column'}}
+              overlayStyle={{backgroundColor: '#000'}}
+              titleStyle={styles.title}
+              contentContainerStyle={styles.alert}
+              show={showAlert}
+              showProgress={false}
+              title={title}
+              closeOnTouchOutside={false}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText={newgmbtn}
+              confirmText={sharebtn}
+              onCancelPressed={() => {
+                this.newGame();
+              }}
+              onConfirmPressed={onShare}
+            />
             {/* <View>{moves}</View> */}
           </View>
         </View>
@@ -146,7 +222,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   newGame: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1b1b1b',
     width: 130,
     height: 50,
     borderRadius: 23,
@@ -155,7 +231,7 @@ const styles = StyleSheet.create({
   },
   newText: {
     fontSize: 20,
-    color: '#000',
+    color: 'lightgrey',
   },
   menuIcon: {
     position: 'absolute',
@@ -164,6 +240,19 @@ const styles = StyleSheet.create({
     // backgroundColor: '#000',
     // color: '#fff',
     zIndex: 999,
+  },
+  alert: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#000',
+    flexDirection: 'column',
+  },
+  title: {
+    fontSize: 45,
+    color: '#fff',
   },
 });
 
@@ -186,3 +275,5 @@ function calculateWinner(squares) {
   }
   return null;
 }
+
+<Icon name="sharealt" size={30} color="lightgrey" />;
