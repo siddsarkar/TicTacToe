@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {BackHandler, Alert, Vibration} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -19,6 +20,13 @@ function NotificationsScreen({navigation}) {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
+  const [initRender, setInitRender] = useState(true);
+
+  useEffect(() => {
+    SplashScreen.hide();
+    setInitRender(false);
+  }, [initRender]);
+
   useEffect(() => {
     const backAction = () => {
       Vibration.vibrate(50);
@@ -44,7 +52,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerStyle={styles.drawer}
+        drawerStyle={{...styles.drawer, width: initRender ? null : '70%'}}
         initialRouteName="Home"
         drawerContent={(props) => <DrawerContent {...props} />}>
         <Drawer.Screen name="Home" component={HomeScreen} />

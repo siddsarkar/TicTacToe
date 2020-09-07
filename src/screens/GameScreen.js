@@ -8,9 +8,10 @@ import {
   StatusBar,
   Share,
   Vibration,
+  Button,
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import SplashScreen from 'react-native-splash-screen';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Game extends Component {
@@ -26,11 +27,6 @@ export default class Game extends Component {
       xIsNext: true,
     };
   }
-  componentDidMount() {
-    //do stuff
-    SplashScreen.hide();
-  }
-
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -47,12 +43,12 @@ export default class Game extends Component {
     Vibration.vibrate(50);
   }
 
-  // jumpTo(step) {
-  //   this.setState({
-  //     stepNumber: step,
-  //     xIsNext: step % 2 === 0,
-  //   });
-  // }
+  jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: step % 2 === 0,
+    });
+  }
 
   newGame() {
     this.setState({
@@ -73,20 +69,31 @@ export default class Game extends Component {
     const showAlert = winner || this.state.stepNumber == 9 ? true : false;
     const title = winner ? `Winner is ${winner} !` : 'Match tied';
 
-    // const moves = history.map((step, move) => {
-    //   //   const desc = move ? 'Go to move #' + move : 'Go to game start';
-    //   const desc = `Go to move # ${move}`;
+    const moves = history.map((step, move) => {
+      // const desc = move ? 'Go to move #' + move : 'Go to game start';
+      const desc = `#${move}`;
 
-    //   return (
-    //     <Button
-    //       key={move}
-    //       title={desc}
-    //       onPress={() => {
-    //         this.jumpTo(move);
-    //       }}
-    //     />
-    //   );
-    // });
+      if (move === 0) {
+        return null;
+      } else {
+        return (
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: move % 2 == 0 ? '#3333' : '#1b1b1b',
+            }}
+            key={move}
+            onPress={() => {
+              this.jumpTo(move);
+            }}>
+            <Text
+              style={{color: move % 2 == 0 ? '#333' : '#b4b4b4', fontSize: 24}}>
+              {desc}
+            </Text>
+          </TouchableOpacity>
+        );
+      }
+    });
 
     const onShare = async () => {
       try {
@@ -196,7 +203,16 @@ export default class Game extends Component {
               }}
               onConfirmPressed={onShare}
             />
-            {/* <View>{moves}</View> */}
+          </View>
+          <View
+            style={{
+              zIndex: 99999,
+              position: 'absolute',
+
+              bottom: 0,
+              left: 0,
+            }}>
+            {moves}
           </View>
         </View>
       </>
