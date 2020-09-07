@@ -2,4 +2,4 @@
 ### A Two-player TicTacToe game built with React-Native
 ## Screenshots
 
-![Gif Image](https://im6.ezgif.com/tmp/ezgif-6-2d32c2b7e253.gif)
+![Gif Image](https://raw.githubusercontent.com/siddsarkar/tic-tac-toe-android-react-native/master/app-screenshots/demo.gif)
