@@ -122,18 +122,6 @@ export default class Game extends Component {
       status = `Player ${this.state.xIsNext ? 'X' : 'O'}'s  turn`;
     }
 
-    const sharebtn = (
-      <Text style={styles.newText}>
-        <Icon name="sharealt" size={20} color="#fff" /> Share App
-      </Text>
-    );
-
-    const newgmbtn = (
-      <Text style={styles.newText}>
-        <Icon name="retweet" size={20} color="#fff" /> New Game
-      </Text>
-    );
-
     return (
       <>
         <StatusBar backgroundColor="#1b1b1b" barStyle="light-content" />
@@ -196,8 +184,8 @@ export default class Game extends Component {
               closeOnHardwareBackPress={false}
               showCancelButton={true}
               showConfirmButton={true}
-              cancelText={newgmbtn}
-              confirmText={sharebtn}
+              cancelText={'New Game'}
+              confirmText={'Share'}
               onCancelPressed={() => {
                 this.newGame();
               }}
