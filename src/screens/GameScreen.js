@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
-import Board from '../components/Board';
 import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
-  StatusBar,
+  Alert,
   Share,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   Vibration,
-  Button,
-  ScrollView,
+  View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Board from '../components/Board';
 
 export default class Game extends Component {
   constructor(props) {
@@ -27,18 +26,20 @@ export default class Game extends Component {
       xIsNext: true,
     };
   }
+
   handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];
+    const {history, stepNumber, xIsNext} = this.state;
+    const clickHistory = history.slice(0, stepNumber + 1);
+    const current = clickHistory[clickHistory.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = xIsNext ? 'X' : 'O';
     this.setState({
-      history: history.concat([{squares: squares}]),
-      stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
+      history: clickHistory.concat([{squares}]),
+      stepNumber: clickHistory.length,
+      xIsNext: !xIsNext,
     });
     Vibration.vibrate(50);
   }
@@ -63,10 +64,11 @@ export default class Game extends Component {
   }
 
   render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
+    const {navigation} = this.props;
+    const {history, stepNumber} = this.state;
+    const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
-    const showAlert = winner || this.state.stepNumber == 9 ? true : false;
+    const showAlert = !!(winner || stepNumber === 9);
     const title = winner ? `Winner is ${winner} !` : 'Match tied';
 
     const moves = history.map((step, move) => {
@@ -75,24 +77,25 @@ export default class Game extends Component {
 
       if (move === 0) {
         return null;
-      } else {
-        return (
-          <TouchableOpacity
-            style={{
-              padding: 10,
-              backgroundColor: move % 2 == 0 ? '#3333' : '#1b1b1b',
-            }}
-            key={move}
-            onPress={() => {
-              this.jumpTo(move);
-            }}>
-            <Text
-              style={{color: move % 2 == 0 ? '#333' : '#b4b4b4', fontSize: 24}}>
-              {desc}
-            </Text>
-          </TouchableOpacity>
-        );
       }
+      return (
+        <TouchableOpacity
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={{
+            padding: 10,
+            backgroundColor: move % 2 === 0 ? '#3333' : '#1b1b1b',
+          }}
+          key={move.toString()}
+          onPress={() => {
+            this.jumpTo(move);
+          }}>
+          <Text
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{color: move % 2 === 0 ? '#333' : '#b4b4b4', fontSize: 24}}>
+            {desc}
+          </Text>
+        </TouchableOpacity>
+      );
     });
 
     const onShare = async () => {
@@ -111,15 +114,16 @@ export default class Game extends Component {
           // dismissed
         }
       } catch (error) {
-        alert(error.message);
+        Alert(error.message);
       }
     };
 
     let status;
+    const {xIsNext} = this.state;
     if (winner) {
       status = `${winner} Won!`;
     } else {
-      status = `Player ${this.state.xIsNext ? 'X' : 'O'}'s  turn`;
+      status = `Player ${xIsNext ? 'X' : 'O'}'s  turn`;
     }
 
     return (
@@ -133,10 +137,11 @@ export default class Game extends Component {
             size={30}
             color="lightgrey"
             onPress={() => {
-              this.props.navigation.openDrawer();
+              navigation.openDrawer();
             }}
           />
           <Icon
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{position: 'absolute', right: 20, top: 20, zIndex: 999}}
             name="sharealt"
             size={30}
@@ -161,19 +166,13 @@ export default class Game extends Component {
             </TouchableOpacity>
 
             <AwesomeAlert
-              cancelButtonStyle={{
-                ...styles.newGame,
-                backgroundColor: '#1b1b1b',
-                width: 150,
-              }}
+              cancelButtonStyle={styles.newGame}
               cancelButtonTextStyle={styles.newText}
-              confirmButtonStyle={{
-                ...styles.newGame,
-                backgroundColor: '#1b1b1b',
-                width: 150,
-              }}
+              confirmButtonStyle={styles.newGame}
               confirmButtonTextStyle={styles.newText}
+              // eslint-disable-next-line react-native/no-inline-styles
               actionContainerStyle={{flexDirection: 'column'}}
+              // eslint-disable-next-line react-native/no-inline-styles
               overlayStyle={{backgroundColor: '#000'}}
               titleStyle={styles.title}
               contentContainerStyle={styles.alert}
@@ -182,10 +181,10 @@ export default class Game extends Component {
               title={title}
               closeOnTouchOutside={false}
               closeOnHardwareBackPress={false}
-              showCancelButton={true}
-              showConfirmButton={true}
-              cancelText={'New Game'}
-              confirmText={'Share'}
+              showCancelButton
+              showConfirmButton
+              cancelText="New Game"
+              confirmText="Share"
               onCancelPressed={() => {
                 this.newGame();
               }}
@@ -193,10 +192,10 @@ export default class Game extends Component {
             />
           </View>
           <View
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{
               zIndex: 99999,
               position: 'absolute',
-
               bottom: 0,
               left: 0,
             }}>
@@ -225,12 +224,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   newGame: {
-    backgroundColor: '#1b1b1b',
-    width: 130,
     height: 50,
     borderRadius: 23,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#1b1b1b',
+    width: 150,
   },
   newText: {
     fontSize: 20,
@@ -240,8 +239,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     left: 20,
-    // backgroundColor: '#000',
-    // color: '#fff',
     zIndex: 999,
   },
   alert: {

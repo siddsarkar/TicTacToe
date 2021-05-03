@@ -4,12 +4,13 @@ import Square from './Square';
 
 export default class Board extends Component {
   renderSquare(i) {
+    const {onClick, squares} = this.props;
     return (
       <Square
         onClick={() => {
-          this.props.onClick(i);
+          onClick(i);
         }}
-        value={this.props.squares[i]}
+        value={squares[i]}
       />
     );
   }

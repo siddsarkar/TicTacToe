@@ -1,15 +1,14 @@
 import React from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
   BackHandler,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/AntDesign';
 
-export function DrawerContent(props) {
+export default function DrawerContent({navigation}) {
   return (
     <View style={styles.drawer}>
       <Icon style={styles.icon} name="meh" size={100} color="#fff" />
@@ -17,14 +16,14 @@ export function DrawerContent(props) {
       <TouchableOpacity
         style={styles.links}
         onPress={() => {
-          props.navigation.navigate('Home');
+          navigation.navigate('Home');
         }}>
         <Text style={styles.text}>Home</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.links}
         onPress={() => {
-          props.navigation.navigate('Notifications');
+          navigation.navigate('Notifications');
         }}>
         <Text style={styles.text}>About</Text>
       </TouchableOpacity>
@@ -37,8 +36,14 @@ export function DrawerContent(props) {
       </TouchableOpacity>
       <TouchableOpacity style={styles.footer}>
         <Text style={styles.footertext}>
-          Developed with Love{'  '}
-          <Icon style={{marginLeft: 20}} name="heart" size={11} color="#fff" />
+          Developed with Love
+          <Icon
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{marginLeft: 20}}
+            name="heart"
+            size={11}
+            color="#fff"
+          />
         </Text>
         <Text style={styles.footertext}>by Siddhartth</Text>
         <Text style={styles.footertext}>version 0.0.3</Text>

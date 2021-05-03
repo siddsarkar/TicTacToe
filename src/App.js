@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import SplashScreen from 'react-native-splash-screen';
-import {BackHandler, Alert, Vibration} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
-import {DrawerContent} from './drawer/DrawerContent';
-import {StyleSheet} from 'react-native';
-
-import GameScreen from './screens/GameScreen';
+import React, {useEffect, useState} from 'react';
+import {Alert, BackHandler, StyleSheet, Vibration} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import DrawerContent from './drawer/DrawerContent';
 import AboutScreen from './screens/AboutScreen';
+import GameScreen from './screens/GameScreen';
 
 function HomeScreen({navigation}) {
   return <GameScreen {...{navigation}} />;
@@ -34,10 +32,13 @@ export default function App() {
         {
           text: 'Cancel',
           onPress: () => null,
+
           style: 'cancel',
         },
+
         {text: 'YES', onPress: () => BackHandler.exitApp()},
       ]);
+
       return true;
     };
 
@@ -52,9 +53,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerStyle={{...styles.drawer, width: initRender ? null : '70%'}}
+        // eslint-disable-next-line react-native/no-inline-styles
+        drawerStyle={[styles.drawer, {width: initRender ? null : '70%'}]}
         initialRouteName="Home"
-        drawerContent={(props) => <DrawerContent {...props} />}>
+        drawerContent={DrawerContent}>
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
       </Drawer.Navigator>

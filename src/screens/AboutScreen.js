@@ -1,27 +1,23 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-class Aboutscreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Icon
-          style={styles.menuIcon}
-          name="back"
-          size={30}
-          color="lightgrey"
-          onPress={() => {
-            this.props.navigation.navigate('Home');
-          }}
-        />
-        <Text style={styles.text}>sidharth</Text>
-        <Text style={styles.text}>loves you</Text>
-        <Text style={styles.text}>3000</Text>
-      </View>
-    );
-  }
-}
 
+const Aboutscreen = ({navigation}) => (
+  <View style={styles.container}>
+    <Icon
+      style={styles.menuIcon}
+      name="back"
+      size={30}
+      color="lightgrey"
+      onPress={() => {
+        navigation.navigate('Home');
+      }}
+    />
+    <Text style={styles.text}>sidharth</Text>
+    <Text style={styles.text}>loves you</Text>
+    <Text style={styles.text}>3000</Text>
+  </View>
+);
 export default Aboutscreen;
 
 const styles = StyleSheet.create({
